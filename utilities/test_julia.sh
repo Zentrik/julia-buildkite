@@ -55,11 +55,8 @@ if [[ "${OS}" == "linux" ]]; then
     mkdir -p ${TMPDIR}
 fi
 
-if [[ "${OS}" == "windows" ]]; then
-    # The windows runner has 32GB and 8 workers, but windows doesn't do overcommit so if we go over it it fails spetacularly
-    # UPDATE IF THE RUNNER CONFIG CHANGES
-    export JULIA_TEST_MAXRSS_MB=3800
-fi
+#Always set the max rss so that if tests add large global variables (which they do) we don't make the GC's life too hard
+export JULIA_TEST_MAXRSS_MB=3800
 
 if [[ "${ARCH}" == "i686" ]]; then
     # Assume that we only have 3.5GB available to a single process, and that a single
@@ -150,5 +147,20 @@ if [[ -z "${USE_RR-}" ]]; then
     echo "Core dump size limit:      $(ulimit -c)"
 fi
 
-echo "--- Run the Julia test suite"
-${JULIA_CMD_FOR_TESTS:?} -e "Base.runtests(\"${TESTS:?}\"; ncores = ${NCORES_FOR_TESTS:?})"
+# Begin with "+++" => Expand test group by default
+echo "+++ Run the Julia test suite"
+# set -e; requires us using if to check the exit status
+if ${JULIA_CMD_FOR_TESTS:?} -e "Base.runtests(\"${TESTS:?}\"; ncores = ${NCORES_FOR_TESTS:?})"; then
+  exitVal=0
+else
+  exitVal=1
+fi
+
+echo "--- Upload results.json report"
+if compgen -G "${JULIA_INSTALL_DIR}/share/julia/test/results*.json"; then
+    (cd "${JULIA_INSTALL_DIR}/share/julia/test"; buildkite-agent artifact upload results*.json)
+else
+    echo "no JSON results files found"
+fi
+
+exit $exitVal
