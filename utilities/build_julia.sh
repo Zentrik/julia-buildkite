@@ -51,7 +51,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO-}" ]]; then
 
     echo "--- Build Julia Stage 1 - with instrumentation"
 
-    cd contrib/pgo-lto
+    cd contrib/pgo-lto-bolt
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
@@ -66,8 +66,23 @@ for FLAG in "${MFLAGS[@]}"; do
 done
 
 if [[ ! -z "${USE_JULIA_PGO_LTO-}" ]]; then
-    echo "--- Build Julia Stage 2 - optimised"
+    echo "--- Build Julia Stage 2 - PGO + LTO optimised"
     ${MAKE} "${MFLAGS[@]}" stage2
+
+    echo "--- Copying original shared libraries"
+    ${MAKE} "${MFLAGS[@]}" copy_originals
+
+    echo "--- Instrumenting with BOLT"
+    ${MAKE} "${MFLAGS[@]}" bolt_instrument
+
+    echo "--- Finishing and Profiling Julia Stage 2"
+    ${MAKE} "${MFLAGS[@]}" finish_stage2
+
+    echo "--- Merging BOLT Profiles"
+    ${MAKE} "${MFLAGS[@]}" merge_data
+
+    echo "--- Optimize Julia Stage 2 with BOLT"
+    ${MAKE} "${MFLAGS[@]}" bolt
 
     cd ../..
 else
