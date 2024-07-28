@@ -52,6 +52,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
     echo "--- Build Julia Stage 1 - with instrumentation"
 
     cd contrib/pgo-lto
+    export MAKE="${MAKE} "${MFLAGS[@]}""
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
