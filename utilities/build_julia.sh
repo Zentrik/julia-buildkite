@@ -60,7 +60,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
     echo "--- Build Julia Stage 1 - with instrumentation"
 
     git remote add test https://github.com/Zentrik/julia
-    git fetch
+    git fetch test
     git switch test-ci
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
