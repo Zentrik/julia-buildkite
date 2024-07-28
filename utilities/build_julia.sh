@@ -61,6 +61,9 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
 
     cd contrib/pgo-lto
     alias make="make -d"
+    echo $MAKE
+    MAKE="make"
+    echo $MAKE
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
