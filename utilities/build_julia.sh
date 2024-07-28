@@ -44,9 +44,7 @@ fi
 MFLAGS+=( "-j${JULIA_CPU_THREADS}")
 
 # Add a few default flags to our make flags:
-MFLAGS+=( "VERBOSE=1 -d" )
-export LLVM_BRANCH=julia-16.0.6-2
-export LLVM_SHA1=julia-16.0.6-2
+MFLAGS+=( "VERBOSE=1" )
 MFLAGS+=( "TAGGED_RELEASE_BANNER=Official https://julialang.org/ release" )
 MFLAGS+=( "JULIA_CPU_TARGET=${JULIA_CPU_TARGET}" )
 
@@ -62,6 +60,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
     echo "--- Build Julia Stage 1 - with instrumentation"
 
     cd contrib/pgo-lto
+    export MAKE="${MAKE} -d"
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
