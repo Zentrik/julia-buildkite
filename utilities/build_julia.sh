@@ -61,7 +61,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
 
     git checkout -b new_branch e25ce086c993bdab606c320367bc90271c9ce3f8
 
-    cd contrib/pgo-lto-bolt
+    cd contrib/pgo-lto
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
