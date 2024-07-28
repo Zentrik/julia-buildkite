@@ -20,16 +20,16 @@ echo
 buildkite-agent --version
 
 if [[ "${ROOTFS_IMAGE_NAME-}" == "llvm_passes" ]]; then
-    echo "--- Update CMake"
-    contrib/download_cmake.sh
+    # echo "--- Update CMake"
+    # contrib/download_cmake.sh
 
-    cd deps/scratch
-    CMAKE_SHA256_LINUX_X86_64=458777097903b0f35a0452266b923f0a2f5b62fe331e636e2dcc4b636b768e36
-    ../tools/jldownload https://cmake.org/files/v3.20/cmake-3.20.6-linux-x86_64.tar.gz
-    tar -xzf cmake-3.20.6-linux-x86_64.tar.gz
-    rm ../../Make.user
-    echo "CMAKE = $PWD/cmake-3.20.6-linux-x86_64/bin/cmake" >> ../../Make.user
-    cd ../..
+    # cd deps/scratch
+    # CMAKE_SHA256_LINUX_X86_64=458777097903b0f35a0452266b923f0a2f5b62fe331e636e2dcc4b636b768e36
+    # ../tools/jldownload https://cmake.org/files/v3.20/cmake-3.20.6-linux-x86_64.tar.gz
+    # tar -xzf cmake-3.20.6-linux-x86_64.tar.gz
+    # rm ../../Make.user
+    # echo "CMAKE = $PWD/cmake-3.20.6-linux-x86_64/bin/cmake" >> ../../Make.user
+    # cd ../..
 fi
 
 # These are the flags we'll provide to `make`
@@ -59,9 +59,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
 
     echo "--- Build Julia Stage 1 - with instrumentation"
 
-    git remote add test https://github.com/Zentrik/julia
-    git fetch test
-    git switch test-ci
+    git checkout -b new_branch e25ce086c993bdab606c320367bc90271c9ce3f8
 
     cd contrib/pgo-lto-bolt
     ${MAKE} "${MFLAGS[@]}" stage1
