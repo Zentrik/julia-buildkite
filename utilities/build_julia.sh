@@ -22,6 +22,13 @@ buildkite-agent --version
 if [[ "${ROOTFS_IMAGE_NAME-}" == "llvm_passes" ]]; then
     echo "--- Update CMake"
     contrib/download_cmake.sh
+
+    cd deps/scratch
+    CMAKE_SHA256_LINUX_X86_64=458777097903b0f35a0452266b923f0a2f5b62fe331e636e2dcc4b636b768e36
+    ../tools/jldownload https://cmake.org/files/v3.20/cmake-3.20.6-linux-x86_64.tar.gz
+    tar -xzf cmake-3.20.6-linux-x86_64.tar.gz
+    rm ../../Make.user
+    echo "CMAKE = $PWD/cmake-3.20.6-linux-x86_64/bin/cmake" >> ../../Make.user
 fi
 
 # These are the flags we'll provide to `make`
