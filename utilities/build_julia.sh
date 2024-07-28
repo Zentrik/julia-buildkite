@@ -40,7 +40,7 @@ MFLAGS+=( "VERBOSE=1" )
 MFLAGS+=( "TAGGED_RELEASE_BANNER=Official https://julialang.org/ release" )
 MFLAGS+=( "JULIA_CPU_TARGET=${JULIA_CPU_TARGET}" )
 
-if [[ ! -z "${USE_JULIA_PGO_LTO-}" ]]; then
+if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
     MFLAGS+=( "STAGE2_BUILD=$PWD" )
 
     echo "--- Collect make options"
@@ -65,7 +65,7 @@ for FLAG in "${MFLAGS[@]}"; do
     echo " -> ${FLAG}"
 done
 
-if [[ ! -z "${USE_JULIA_PGO_LTO-}" ]]; then
+if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
     echo "--- Build Julia Stage 2 - PGO + LTO optimised"
     ${MAKE} "${MFLAGS[@]}" stage2
 
@@ -123,6 +123,7 @@ echo "--- Upload build artifacts to buildkite"
 buildkite-agent artifact upload "${UPLOAD_FILENAME}.tar.gz"
 
 # Upload the profile data to allow for reproducible builds
-if [[ ! -z "${USE_JULIA_PGO_LTO-}" ]]; then
-    buildkite-agent artifact upload "contrib/pgo-lto/profiles/merged.prof"
+if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
+    buildkite-agent artifact upload "contrib/pgo-lto-bolt/profiles/merged.prof"
+    buildkite-agent artifact upload "contrib/pgo-lto-bolt/profiles-bolt/*.merged.fdata"
 fi
