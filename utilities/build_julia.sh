@@ -59,7 +59,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
 
     echo "--- Build Julia Stage 1 - with instrumentation"
 
-    git checkout -b new_branch 19593496a803c044ecb572087dbb2c19651d087e
+    git checkout -b new_branch d9a0c2553ba023adc54a297fce8cb3dc127be8e6
 
     cd contrib/pgo-lto
     ${MAKE} "${MFLAGS[@]}" stage1
