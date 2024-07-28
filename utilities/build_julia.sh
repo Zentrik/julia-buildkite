@@ -22,14 +22,6 @@ buildkite-agent --version
 if [[ "${ROOTFS_IMAGE_NAME-}" == "llvm_passes" ]]; then
     echo "--- Update CMake"
     contrib/download_cmake.sh
-
-    # cd deps/scratch
-    # CMAKE_SHA256_LINUX_X86_64=458777097903b0f35a0452266b923f0a2f5b62fe331e636e2dcc4b636b768e36
-    # ../tools/jldownload https://cmake.org/files/v3.20/cmake-3.20.6-linux-x86_64.tar.gz
-    # tar -xzf cmake-3.20.6-linux-x86_64.tar.gz
-    # rm ../../Make.user
-    # echo "CMAKE = $PWD/cmake-3.20.6-linux-x86_64/bin/cmake" >> ../../Make.user
-    # cd ../..
 fi
 
 # These are the flags we'll provide to `make`
@@ -44,7 +36,7 @@ fi
 MFLAGS+=( "-j${JULIA_CPU_THREADS}")
 
 # Add a few default flags to our make flags:
-MFLAGS+=( "VERBOSE=1 -d" )
+MFLAGS+=( "VERBOSE=1" )
 MFLAGS+=( "TAGGED_RELEASE_BANNER=Official https://julialang.org/ release" )
 MFLAGS+=( "JULIA_CPU_TARGET=${JULIA_CPU_TARGET}" )
 
@@ -59,9 +51,7 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
 
     echo "--- Build Julia Stage 1 - with instrumentation"
 
-    git checkout -b new_branch c7b87648f1c82958e448ec5f2ff0d9154af53c53
-
-    cd contrib/pgo-lto
+    cd contrib/pgo-lto-bolt
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
