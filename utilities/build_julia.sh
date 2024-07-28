@@ -29,6 +29,7 @@ if [[ "${ROOTFS_IMAGE_NAME-}" == "llvm_passes" ]]; then
     tar -xzf cmake-3.20.6-linux-x86_64.tar.gz
     rm ../../Make.user
     echo "CMAKE = $PWD/cmake-3.20.6-linux-x86_64/bin/cmake" >> ../../Make.user
+    cd ../..
 fi
 
 # These are the flags we'll provide to `make`
