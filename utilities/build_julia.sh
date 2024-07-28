@@ -62,6 +62,8 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
     git remote add test https://github.com/Zentrik/julia
     git fetch test
     git switch test-ci
+
+    cd contrib/pgo-lto-bolt
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
