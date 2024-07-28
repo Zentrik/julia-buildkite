@@ -59,11 +59,9 @@ if [[ ! -z "${USE_JULIA_PGO_LTO_BOLT-}" ]]; then
 
     echo "--- Build Julia Stage 1 - with instrumentation"
 
-    cd contrib/pgo-lto
-    alias make="make -d"
-    echo $MAKE
-    MAKE="make"
-    echo $MAKE
+    git remote add test https://github.com/Zentrik/julia
+    git fetch
+    git switch test-ci
     ${MAKE} "${MFLAGS[@]}" stage1
     # Building stage1 collects profiling data which we use instead of collecting our own
 fi
