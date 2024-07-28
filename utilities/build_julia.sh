@@ -44,7 +44,7 @@ fi
 MFLAGS+=( "-j${JULIA_CPU_THREADS}")
 
 # Add a few default flags to our make flags:
-MFLAGS+=( "VERBOSE=1" )
+MFLAGS+=( "VERBOSE=1 -d" )
 MFLAGS+=( "TAGGED_RELEASE_BANNER=Official https://julialang.org/ release" )
 MFLAGS+=( "JULIA_CPU_TARGET=${JULIA_CPU_TARGET}" )
 
