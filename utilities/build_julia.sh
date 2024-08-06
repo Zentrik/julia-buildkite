@@ -19,15 +19,13 @@ ld -v
 echo
 buildkite-agent --version
 
-# These are the flags we'll provide to `make`
-MFLAGS=()
-
 if [[ "${ROOTFS_IMAGE_NAME-}" == "llvm_passes" ]]; then
     echo "--- Update CMake"
     contrib/download_cmake.sh
 fi
 
-MFLAGS+=( "LDFLAGS=-Wl,--undefined-version" )
+# These are the flags we'll provide to `make`
+MFLAGS=("CFLAGS=-Wl,--undefined-version CXXFLAGS=-Wl,--undefined-version")
 
 # If we have the option, let's use `--output-sync`
 if ${MAKE} --help | grep output-sync >/dev/null 2>/dev/null; then
