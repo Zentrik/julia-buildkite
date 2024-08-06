@@ -25,7 +25,7 @@ if [[ "${ROOTFS_IMAGE_NAME-}" == "llvm_passes" ]]; then
 fi
 
 # These are the flags we'll provide to `make`
-MFLAGS=("CFLAGS=-Wl,--undefined-version CXXFLAGS=-Wl,--undefined-version")
+MFLAGS=()
 
 # If we have the option, let's use `--output-sync`
 if ${MAKE} --help | grep output-sync >/dev/null 2>/dev/null; then
